@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  hyperf:
+    container_name: hyperf
+    image: hyperf
+    build:
+      context: .
+    volumes:
+      - ./:/opt/www
+    ports:
+      - 9501:9501
+    environment:
+      - APP_ENV=dev
+      - SCAN_CACHEABLE=false
+    networks:
+      - hyperf
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:11.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hyperf
+    ports:
+      - 3307:3306
+    networks:
+      - hyperf
+
+  redis:
+    container_name: redis
+    image: redis:7.4-alpine
+    ports:
+      - 6380:6379
+    networks:
+      - hyperf
+
+networks:
+  hyperf:
+    name: hyperf
